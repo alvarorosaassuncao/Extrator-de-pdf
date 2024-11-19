@@ -1,0 +1,64 @@
+/* Estilos personalizados para o aplicativo Streamlit */
+body {
+    background-color: #1e1e1e;
+    color: #ffffff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #ff6600;
+}
+
+.stButton>button {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.stButton>button:hover {
+    background-color: #cc5200;
+}
+
+.stSidebar {
+    background-color: #333333;
+    border-right: 1px solid #444444;
+}
+
+.stSidebar .stButton>button {
+    background-color: transparent;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.stSidebar .stButton>button:hover {
+    background-color: #444444;
+}
+
+.stTextInput>div>input {
+    width: 50%;
+    margin-bottom: 20px;
+}
+
+/* Estilos personalizados para os botões do histórico de uploads */
+.stSidebar .stButton>button.upload-history {
+    background-color: transparent;
+    color: #ffffff;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.stSidebar .stButton>button.upload-history:hover {
+    background-color: transparent;
+    color: #ffffff;
+}
