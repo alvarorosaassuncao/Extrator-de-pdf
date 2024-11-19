@@ -3,7 +3,6 @@ import fitz  # PyMuPDF
 import pandas as pd
 from io import BytesIO
 import json
-import os
 
 # Configuração da página
 st.set_page_config(page_title="Extrator de Texto de PDF", layout="wide", initial_sidebar_state="expanded")
@@ -34,28 +33,9 @@ def summarize_text(text):
     summary = '. '.join(sentences[:5]) + '.'
     return summary
 
-# Função para salvar histórico de uploads
-def save_upload_history(file_name, text):
-    if not os.path.exists("upload_history"):
-        os.makedirs("upload_history")
-    with open(f"upload_history/{file_name}.txt", "w", encoding="utf-8") as f:
-        f.write(text)
-
-# Função para carregar histórico de uploads
-def load_upload_history():
-    history = {}
-    if os.path.exists("upload_history"):
-        for file_name in os.listdir("upload_history"):
-            with open(f"upload_history/{file_name}", "r", encoding="utf-8") as f:
-                history[file_name] = f.read()
-    return history
-
-# Adicionando CSS personalizado
-def local_css(file_name):
-    with open(file_name) as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-
-local_css("style.css")
+# Inicializar o estado da sessão para o histórico de uploads
+if 'upload_history' not in st.session_state:
+    st.session_state.upload_history = {}
 
 # Upload de arquivo PDF
 uploaded_file = st.sidebar.file_uploader("Escolha um arquivo PDF", type="pdf")
@@ -63,7 +43,7 @@ if uploaded_file is not None:
     pdf_document = fitz.open(stream=uploaded_file.read(), filetype="pdf")
     text = extract_text_from_pdf(pdf_document)
     file_name = uploaded_file.name.split(".")[0]
-    save_upload_history(file_name, text)
+    st.session_state.upload_history[file_name] = text
     
     # Menu de Navegação com Botões de Rádio
     option = st.sidebar.radio("Escolha o que deseja ver", ["Texto Extraído", "Tabelas Extraídas", "Resumo Automático"])
@@ -117,7 +97,6 @@ if uploaded_file is not None:
 
 # Histórico de Uploads
 st.sidebar.markdown("<h3 style='color: #ff6600;'>Histórico de Uploads</h3>", unsafe_allow_html=True)
-upload_history = load_upload_history()
-for file_name, text in upload_history.items():
+for file_name, text in st.session_state.upload_history.items():
     if st.sidebar.button(file_name, key=file_name):
         st.text_area(f"Texto do PDF - {file_name}", text, height=300)
